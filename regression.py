@@ -10,24 +10,24 @@ import matplotlib.pyplot as plt
 from statistics import mean
 
 
-#dışardan veriseti dahil etme
-def veriseti():
+# inclusion external data 
+def dataset():
     data = pd.read_csv('Salary_Data.csv') 
     X=data["YearsExperience"].values
     Y=data["Salary"].values
     return X,Y
 
-#veriyi koda gömme
-def manuelveri():
+#embed data into code 
+def manueldata():
     X = np.array([60,61,62,63,65], dtype=np.float64)
     Y = np.array([3.1,3.6,3.8,4.0,4.1], dtype=np.float64)
     return X,Y
 
-#klavyeden veri girişi
-def veriekleme():
+#data input with keyboard
+def addata():
     X=np.array([], dtype=np.float64)
     Y=np.array([], dtype=np.float64)
-    i=int(input("Kaç adet veri gireceksiniz: "))
+    i=int(input("How many will you input data?"))
     for j in range(0,i):
         x=float(input("X: "))
         X=np.append(X,x)
@@ -37,22 +37,22 @@ def veriekleme():
         Y=np.append(Y,y)
     return X,Y
 
-#normalizasyon
-def normalizasyon(norm):
+#normalization
+def normalization(norm):
     normed = (norm - min(norm)) / (max(norm) - min(norm))
     return normed
     
-#doğrusal regresyon
+#linear regression
 def regresyon(x, y):
-    print("""\nDoğrusal Regresyon Formülü: y=ax+b\n
-a(eğim)=mean(x)*mean(y)-mean((x * y))/(mean(x)^2-mean(x^2))\n
-b(sabit)=mean(y)-(a*mean(x))""")
-    a = ((np.mean(x) * np.mean(y)) - np.mean((x * y))) / (np.mean(x)**2 - np.mean(x**2))#eğim
-    b = np.mean(y) - (a * np.mean(x))#sabit
+    print("""\Linear Regression Formula: y=ax+b\n
+a(slope)=mean(x)*mean(y)-mean((x * y))/(mean(x)^2-mean(x^2))\n
+b(constant)=mean(y)-(a*mean(x))""")
+    a = ((np.mean(x) * np.mean(y)) - np.mean((x * y))) / (np.mean(x)**2 - np.mean(x**2))#slope
+    b = np.mean(y) - (a * np.mean(x))#constant
     return a, b
 
-#grafik    
-def sekil(a,x,b,y):
+#graphic    
+def shape(a,x,b,y):
     line = [(a * x) + b for x in range(0, 30)]
     plt.scatter(x, y,color='b')
     plt.plot(line, color='r')
@@ -62,40 +62,40 @@ def sekil(a,x,b,y):
     
     
 def main(X,Y):
-    xnorm=normalizasyon(X)
-    print("\nX için normalize edilmiş veriler\n{}".format(xnorm))
+    xnorm=normalization(X)
+    print("\nNormalized data for X \n{}".format(xnorm))
     
-    ynorm=normalizasyon(Y)
-    print("\nY için normalize edilmiş veriler\n{}".format(ynorm))
+    ynorm=normalization(Y)
+    print("\nNormalized data for Y\n{}".format(ynorm))
     
     a,b=regresyon(X,Y)
-    print("\nNormalizasyon uygulanmadan önceki Regresyon sonucu a:{}, b:{}".format(a,b))
+    print("\n Regression result before normalization a:{}, b:{}".format(a,b))
     sekil(a,X,b,Y) 
     
     a,b=regresyon(xnorm,ynorm)
-    print("\nRegresyon sonucu a:{}, b:{}".format(a,b))
+    print("\nRegression result a:{}, b:{}".format(a,b))
     
-    sekil(a,xnorm,b,ynorm)
+    shape(a,xnorm,b,ynorm)
     
     while True:
-        sec=input("1-X değeri verildiğinde Y=?\n2-Y değeri verildiğinde X=?\n3-Çıkış\nSeçim yapınız: ")
-        if sec=="1":
+        choose=input("1-X  when x value is given Y=?\n2- when y value is given X=?\n3-Exit\nPlease choose: ")
+        if choose=="1":
             x=int(input("X:"))
             y=a*x+b
             print("X:{} için Y:{}".format(x,y))
       
-        elif sec=="2":
+        elif choose=="2":
             y=int(input("Y:"))
             x=(y-b)/a
             print("Y:{} için X:{}".format(y,x))
       
-        elif sec=="3":
+        elif choose=="3":
             break
         else:
-            print("\nHatalı Giriş!")
+            print("\nIncorrect entry!")
         
-#X,Y=manuelveri()    
-X,Y=veriseti()
-#X,Y=veriekleme()
+#X,Y=manueldata()    
+X,Y=dataset()
+#X,Y=addata()
 main(X,Y)
 
